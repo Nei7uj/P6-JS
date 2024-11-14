@@ -126,6 +126,7 @@ li:hover {
 	margin-bottom: 1em;
 }
 
+/** Ajouts **/
 .div-container {
 	min-width: 550px;
 	width: 50%;
@@ -147,6 +148,7 @@ li:hover {
 	background-color: #1D6154;
 	color: white;
 }
+/** Fin ajouts **/
 
 .gallery {
 	width: 100%;
