@@ -15,9 +15,17 @@
 <body>
 	<aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titlemodal" style="display:none">
 		<div class="modal-wrapper js-modal-stop">
-			<button class="js-modal-close">Fermer la boite modale</button>
-			<h1>OUAIS OUAIS OUAIIIIIIIS</h1>
-			<p>test blabla ARCAAAAAAAAAAAAAAAAANE</p>
+			<div class="close-button-container">
+				<button class="js-modal-close">
+					<i class="fa-solid fa-xmark"></i>
+				</button>
+			</div>
+			<h3>Galerie photo</h3>
+			<div class="gallery-modal"></div>
+			<hr />
+			<div class="modal-button-container">
+				<button class="add-photo">Ajouter une photo</button>
+			</div>
 		</div>
 	</aside>
 <header>
@@ -26,7 +34,7 @@
 		<ul>
 			<li><a href="#portfolio">projets</a></li>
 			<li><a href="#contact">contact</a></li>
-			<li><a href="login.html">login</a></li>
+			<li class="login"><a href="login.html">login</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -45,6 +53,7 @@
 	</section>
 	<section id="portfolio">
 		<h2>Mes Projets</h2>
+		<p><i class="fa-regular fa-pen-to-square"></i>modifier</p>
 		<div class="div-container">
 			<div class="all">Tous</div>
 		</div>
