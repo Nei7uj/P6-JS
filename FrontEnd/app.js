@@ -20,10 +20,9 @@ async function getWorks(filter) {
                 setModalFigure(json[i]);
             }
         }
-
           const trashCans = document.querySelectorAll(".fa-trash-can");
           trashCans.forEach((e) => e.addEventListener("click", (event) => deleteWork(event))
-        )
+        );
     } catch (error) {
       console.error(error.message);
     }
@@ -79,7 +78,6 @@ document.querySelector(".all").addEventListener("click", () => getWorks());
 
 function displayAdminMode() {
   if (sessionStorage.authToken) {
-    console.log("ok");
     const editBanner = document.createElement("div");
     editBanner.className = "edit";
     editBanner.innerHTML =
@@ -157,13 +155,14 @@ document.querySelectorAll(".js-modal").forEach((a) => {
 
 
 async function deleteWork(event) {
+  event.stopPropagation();
   const id = event.srcElement.id; 
   const deleteApi = "http://localhost:5678/api/works/";
-
-let response = await fetch(deleteApi + `${id}` , {
-  method: "DELETE",
-  headers: {
-    Authorization: "Bearer" + token,
+  const token = sessionStorage.authToken;
+  let response = await fetch(deleteApi + id, {
+    method: "DELETE",
+    headers: {
+      Authorization: "Bearer" + token,
   }
 });
 if(response.status == 401 || response.status == 500) {
