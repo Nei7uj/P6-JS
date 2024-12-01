@@ -20,6 +20,10 @@ async function getWorks(filter) {
                 setModalFigure(json[i]);
             }
         }
+
+          const trashCans = document.querySelectorAll(".fa-trash-can");
+          trashCans.forEach((e) => e.addEventListener("click", (event) => deleteWork(event))
+        )
     } catch (error) {
       console.error(error.message);
     }
@@ -38,7 +42,7 @@ function setModalFigure(data) {
   figure.innerHTML = `<div class="image-container">
                       <img src=${data.imageUrl} alt=${data.title}> 
                       <figcaption>${data.title}</figcaption>
-                      <i class="fa-solid fa-trash-can overlay-icon"></i>
+                      <i id=${data.id} class="fa-solid fa-trash-can overlay-icon"></i>
                       </div>`;          
   document.querySelector(".modal-gallery").append(figure);
 }
@@ -91,7 +95,6 @@ displayAdminMode();
 let modal = null;
 const focusableSelector = "button, a, input, textarea"
 let focusables = []
-let previouslyFocusedElement = null
 
 const openModal = function (e) {
   e.preventDefault()
@@ -102,19 +105,19 @@ const openModal = function (e) {
   modal.removeAttribute("aria-hidden");
   modal.setAttribute("aria-modal", "true");
   modal.addEventListener("click", closeModal);
-  modal.querySelector("js-modal-close").addEventListener("click", closeModal);
-  modal.querySelector("js-modal-close").addEventListener("click", stopPropagation);
+  modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
+  modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
 }
 
 const closeModal = function (e) {
-  if (modal == null) return;
+  if (modal === null) return;
   e.preventDefault()
   modal.style.display = "none";
   modal.setAttribute("aria-hidden", "true");
   modal.removeAttribute("aria-modal");
   modal.removeEventListener("click", closeModal);
-  modal.querySelector("js-modal-close").removeEventListener("click", closeModal);
-  modal.querySelector("js-modal-close").removeEventListener("click", stopPropagation);
+  modal.querySelector(".js-modal-close").removeEventListener("click", closeModal);
+  modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
   modal = null;
 }
 
@@ -124,8 +127,7 @@ const stopPropagation = function (e) {
 
 const focusInModal = function (e) {
   e.preventDefault();
-  focusables.findIndex(modal.querySelector(':focus'));
-  let index = focusables.findIndex((f) => f === modal.querySelector(':focus'));
+  let index = focusables.findIndex((f) => f === modal.querySelector(":focus"));
   if (e.shiftKey === true) {
     index--;
   } else {
@@ -152,3 +154,24 @@ window.addEventListener("keydown", function (e) {
 document.querySelectorAll(".js-modal").forEach((a) => {
   a.addEventListener("click", openModal);
 })
+
+
+async function deleteWork(event) {
+  const id = event.srcElement.id; 
+  const deleteApi = "http://localhost:5678/api/works/";
+
+let response = await fetch(deleteApi + `${id}` , {
+  method: "DELETE",
+  headers: {
+    Authorization: "Bearer" + token,
+  }
+});
+if(response.status == 401 || response.status == 500) {
+  const errorBox = document.createElement("div");
+  errorBox.className = 'error-login';
+  errorBox.innerHTML = "Il y a eu une erreur";
+  document.querySelector(".modal-button-container").prepend(errorBox);
+} else {
+  let result = await response.json();
+  console.log(result);
+}}
