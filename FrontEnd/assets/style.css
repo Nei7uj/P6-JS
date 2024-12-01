@@ -222,6 +222,8 @@ footer nav ul {
 	margin: 2em
 }
 
+/* Ajouts */
+
 .error-login {
 	background-color: #b84947;
 	color: white;
@@ -289,7 +291,7 @@ footer nav ul {
 	cursor: pointer;
 }
 
-.gallery-modal {
+.modal-gallery {
 	width: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -297,7 +299,7 @@ footer nav ul {
 	grid-row-gap: 20px;
 }
 
-.gallery-modal img {
+.modal-gallery img {
 	width: 100%;
 }
 
@@ -320,7 +322,7 @@ hr {
 	justify-content: center;
 }
 
-.add-photo {	
+.add-photo-button {	
 	padding: 10px 20px;
 	width: 250px;
 	border: 1px solid #1D6154;
@@ -330,6 +332,27 @@ hr {
 	background-color: #1D6154;
 	cursor: pointer;
 	margin-top: 20px;
+}
+
+.image-container {
+	position: relative;
+	display: inline-block;
+}
+
+.image-container img {
+	display: block;
+}
+
+.image-container .overlay-icon {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 16px;
+	cursor: pointer;
+	background-color: black;
+	color: white;
+	padding: 4px;
+	border-radius: 10%;
 }
 
 
