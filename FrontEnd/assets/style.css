@@ -173,37 +173,43 @@ li:hover {
 	width: 100%;
 }
 
-#contact {
+.form {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
-#contact > * {
+
+.form > * {
 	text-align: center;
 
 }
-#contact h2{
+.form h2{
 	margin-bottom: 20px;
 }
-#contact form {
+.form form {
 	text-align: left;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
 }
 
-#contact input {
+.form input {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label {
+.form label {
 	margin: 2em 0 1em 0;
 }
-#contact textarea {
+.form textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
+
+.add-photo-form {
+	width: 70%;
+}
+
 
 input[type="submit"]{
 	font-family: 'Syne';
@@ -280,13 +286,24 @@ footer nav ul {
 
 .close-button-container {
 	display: flex;	
-	justify-content: end;
+	justify-content: flex-end;
+}
+
+.modal-buttons-container {
+	display: flex;	
+	justify-content: space-between;
 }
 
 .js-modal-close {
 	background-color: white;
 	border: none;
-	font-weight: bold;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.js-modal-back {
+	background-color: white;
+	border: none;
 	font-size: 18px;
 	cursor: pointer;
 }
@@ -355,4 +372,7 @@ hr {
 	border-radius: 10%;
 }
 
+.add-modal {
+	display: none;
+}
 
