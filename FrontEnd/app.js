@@ -162,7 +162,7 @@ async function deleteWork(event) {
   let response = await fetch(deleteApi + id, {
     method: "DELETE",
     headers: {
-      Authorization: "Bearer" + token,
+      Authorization: "Bearer " + token,
   }
 });
 if(response.status == 401 || response.status == 500) {
