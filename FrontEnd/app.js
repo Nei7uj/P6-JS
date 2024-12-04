@@ -103,7 +103,7 @@ const openModal = function (e) {
   modal.removeAttribute("aria-hidden");
   modal.setAttribute("aria-modal", "true");
   modal.addEventListener("click", closeModal);
-  modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
+  modal.querySelectorAll(".js-modal-close").forEach((e) => e.addEventListener("click", closeModal));
   modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
 }
 
@@ -176,33 +176,22 @@ if(response.status == 401 || response.status == 500) {
 }}
 
 
-// const switchModal = function () {
-//   document.querySelector(".modal-wrapper"
-//   ).innerHTML = `<div class="modal-buttons-container">
-// 				<button class="js-modal-back">
-// 					<i class="fa-solid fa-arrow-left"></i>
-// 				</button>
-//         <button class="js-modal-close">
-// 					<i class="fa-solid fa-xmark"></i>
-// 				</button>
-// 			</div>
-// 			<h3>Ajout photo</h3>
-// 			<div class="form add-photo-form">
-//       <form action="#" method="post">
-// 			  <label for="title">Titre</label>
-// 			  <input type="text" name="title" id="title">
-// 			  <label for="categorie">Catégorie</label>
-// 			  <input type="categorie" name="categorie" id="categorie">
-//         	<hr />
-// 			  <input type="submit" value="Valider">
-// 		  </form>
-//       </div>
-// `;
-//  modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
-//  modal.querySelector(".js-modal-back").addEventListener("click", );
-// }
+const addPhotoButton = document.querySelector('.add-photo-button');
+addPhotoButton.addEventListener('click', toggleModal);
+const backButton = document.querySelector('.js-modal-back');
+backButton.addEventListener("click", toggleModal);
 
-// const backButton = document.querySelector('.fa-arrow-left');
+function toggleModal() {
+  const galleryModal = document.querySelector(".gallery-modal");
+  const addModal = document.querySelector(".add-modal");
 
-// const addPhotoButton = document.querySelector(".add-photo-button");
-// addPhotoButton.addEventListener("click", switchModal);
+  if (
+    galleryModal.style.display === "block" || galleryModal.style.display === ""
+  ) {
+    galleryModal.style.display = "none";
+    addModal.style.display = "block";
+  } else {
+    galleryModal.style.display = "block";
+    addModal.style.display = "none";
+  }
+}
