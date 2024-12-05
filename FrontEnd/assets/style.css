@@ -198,6 +198,14 @@ li:hover {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
+
+.form select {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
 .form label {
 	margin: 2em 0 1em 0;
 }
@@ -376,3 +384,39 @@ hr {
 	display: none;
 }
 
+.file-section {
+	background-color: #e8f1f6;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 10px;
+}
+
+.file-section label {
+	padding: 10px 20px;
+	width: 170px;
+	border: 1px solid #b9c5cc;
+	border-radius: 25px;
+	font-family: 'Syne';
+	color: white;
+	background-color: #b9c5cc;
+	color: #306685;
+	cursor: pointer;
+	margin-top: 20px;
+	text-align: center;
+}
+
+.fa-image {
+	color: #b9c5cc;
+	font-size: 60px;
+	margin-top: 5px;
+}
+
+#photo-container {
+	width: 70%;
+}
+
+
+#photo-container img {
+	width: 100%;
+}

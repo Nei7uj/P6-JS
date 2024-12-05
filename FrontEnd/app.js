@@ -195,3 +195,76 @@ function toggleModal() {
     addModal.style.display = "none";
   }
 }
+
+
+document.querySelector("#file").style.display = "none";
+document.getElementById("file").addEventListener("change", function (event) {
+  const file = event.target.files[0];
+  if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      img.alt= "Uploaded Photo";
+      document.getElementById("photo-container").appendChild(img);
+      // document.querySelector('.picture-loaded').style.display = "none";
+    }
+    reader.readAsDataURL(file);
+    document.querySelectorAll('.picture-loaded').forEach((e) => (e.style.display = "none"));
+  } else {
+    alert("Veuillez sélectionner une image au format JPG ou PNG.");
+  }
+})
+
+
+const titleInput = document.getElementById("title");
+let titleValue = "";
+
+let selectedValue = "1";
+
+document.getElementById("categorie").addEventListener("change", function () {
+  selectedValue = this.value;
+})
+
+titleInput.addEventListener("input", function () {
+  titleValue = titleInput.value;
+})
+
+document.getElementById("picture-form");
+document.addEventListener("submit", handleSubmit);
+
+async function handleSubmit() {
+   event.preventDefault();
+   const hasImage = document.querySelector("#photo-container").firstChild;
+
+   if (hasImage && titleValue) {
+    console.log("hasImage and titleValue is true");
+   } else {
+    console.log("hasImage and titleValue is false");
+   }
+
+   const formData = new FormData();
+   formData.append("image", hasImage);
+   formData.append("title", titleValue);
+   formData.append("categorie", selectedValue);
+   const token = sessionStorage.authToken;
+
+
+    let response = await fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        headers: {
+          Accept: "application/json=",
+          Authorization: "Bearer " + token,
+        },
+        body: formData,
+    });
+    if(response.status != 200){
+        const errorBox = document.createElement("div");
+        errorBox.className = 'error-login';
+        errorBox.innerHTML = "Il y a eu une erreur";
+        document.querySelector("form").prepend(errorBox);
+    } else {
+        let result = await response.json();
+        console.log(result);
+    }
+}
