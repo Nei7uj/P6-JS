@@ -20,6 +20,7 @@ async function getWorks(filter) {
                 setModalFigure(json[i]);
             }
         }
+        //Delete
           const trashCans = document.querySelectorAll(".fa-trash-can");
           trashCans.forEach((e) => e.addEventListener("click", (event) => deleteWork(event))
         );
@@ -36,16 +37,18 @@ function setFigure(data) {
     document.querySelector(".gallery").append(figure);
 }
 
+
 function setModalFigure(data) {
   const figure = document.createElement("figure");
   figure.innerHTML = `<div class="image-container">
-                      <img src=${data.imageUrl} alt=${data.title}> 
+                      <img src="${data.imageUrl}" alt="${data.title}"> 
                       <figcaption>${data.title}</figcaption>
                       <i id=${data.id} class="fa-solid fa-trash-can overlay-icon"></i>
-                      </div>`;          
+                      </div>`;  
+                      
+                      
   document.querySelector(".modal-gallery").append(figure);
 }
-
 
 async function getCategories() {
     const url = "http://localhost:5678/api/categories";
@@ -65,7 +68,6 @@ async function getCategories() {
 }
 getCategories();
 
-
 function setFilter(data) {
     const div = document.createElement("div");
     div.className = data.id;
@@ -73,7 +75,7 @@ function setFilter(data) {
     div.innerHTML = `${data.name}`;
     document.querySelector(".div-container").append(div);
 }
-document.querySelector(".all").addEventListener("click", () => getWorks());
+document.querySelector(".tous").addEventListener("click", () => getWorks());
 
 
 function displayAdminMode() {
@@ -197,17 +199,18 @@ function toggleModal() {
 }
 
 
+let img = document.createElement("img");
+let file;
+
 document.querySelector("#file").style.display = "none";
 document.getElementById("file").addEventListener("change", function (event) {
-  const file = event.target.files[0];
+  file = event.target.files[0];
   if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
     const reader = new FileReader();
     reader.onload = function (e) {
-      const img = document.createElement("img");
       img.src = e.target.result;
       img.alt= "Uploaded Photo";
       document.getElementById("photo-container").appendChild(img);
-      // document.querySelector('.picture-loaded').style.display = "none";
     }
     reader.readAsDataURL(file);
     document.querySelectorAll('.picture-loaded').forEach((e) => (e.style.display = "none"));
@@ -230,41 +233,49 @@ titleInput.addEventListener("input", function () {
   titleValue = titleInput.value;
 })
 
-document.getElementById("picture-form");
-document.addEventListener("submit", handleSubmit);
+const addPictureForm = document.getElementById("picture-form");
 
-async function handleSubmit() {
-   event.preventDefault();
-   const hasImage = document.querySelector("#photo-container").firstChild;
+addPictureForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-   if (hasImage && titleValue) {
-    console.log("hasImage and titleValue is true");
-   } else {
-    console.log("hasImage and titleValue is false");
-   }
+  const hasImage = document.querySelector("#photo-container").querySelector("img");
+  if (!hasImage || !titleValue) {
+    console.error("Image ou titre manquant.");
+    return;
+  }
 
-   const formData = new FormData();
-   formData.append("image", hasImage);
-   formData.append("title", titleValue);
-   formData.append("categorie", selectedValue);
-   const token = sessionStorage.authToken;
+  const formData = new FormData();
+  formData.append("image", file);
+  formData.append("title", titleValue);
+  formData.append("categorie", selectedValue);
 
+  const token = sessionStorage.authToken;
 
+  if (!token) {
+    console.error("Token d'authentification manquant.");
+    return;
+  }
+
+  try {
     let response = await fetch("http://localhost:5678/api/works", {
-        method: "POST",
-        headers: {
-          Accept: "application/json=",
-          Authorization: "Bearer " + token,
-        },
-        body: formData,
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      body: formData,
     });
-    if(response.status != 200){
-        const errorBox = document.createElement("div");
-        errorBox.className = 'error-login';
-        errorBox.innerHTML = "Il y a eu une erreur";
-        document.querySelector("form").prepend(errorBox);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      const errorBox = document.createElement("div");
+      errorBox.className = 'error-login';
+      errorBox.innerHTML = "Il y a eu une erreur";
+      document.querySelector("form").prepend(errorBox);
     } else {
-        let result = await response.json();
-        console.log(result);
+      let result = await response.json();
+      console.log("Réponse réussie :", result);
     }
-}
+  } catch (err) {
+    console.error("Erreur lors de la requête :", err);
+  }
+});
