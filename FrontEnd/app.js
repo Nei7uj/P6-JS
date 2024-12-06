@@ -177,7 +177,6 @@ if(response.status == 401 || response.status == 500) {
   console.log(result);
 }}
 
-
 const addPhotoButton = document.querySelector('.add-photo-button');
 addPhotoButton.addEventListener('click', toggleModal);
 const backButton = document.querySelector('.js-modal-back');
