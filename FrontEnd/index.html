@@ -49,8 +49,8 @@
 					</div>
                       <label for="title">Titre</label>
                       <input type="text" name="title" id="title">
-                      <label for="categorie">Catégorie</label>
-					  <select id="categorie" name="categorie" size="1">
+                      <label for="category">Catégorie</label>
+					  <select id="category" name="category" size="1">
 						<option value="objet">Objets</option>
 						<option value="appartement">Appartements</option>
 						<option value="hotel">Hotels & restaurants</option>
@@ -67,8 +67,8 @@
 	<nav>
 		<ul>
 			<li><a href="#portfolio">projets</a></li>
-			<li><a href="#contact">contact</a></li>
-			<li class="login"><a href="login.html">login</a></li>
+			<li><a href="#form">contact</a></li>
+			<li><a class="log-button" href="login.html">login</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -86,10 +86,12 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
-		<!-- <p><i class="fa-regular fa-pen-to-square"></i>modifier</p> -->
+		<div class="projets-container">
+		<h2 class="projets-title">Mes Projets</h2>
+		<a href="#modal1" class="js-modal js-modal-2"><i class="fa-regular fa-pen-to-square"></i>Mode édition</a>
+		</div>
 		<div class="div-container">
-			<div class="tous">Tous</div>
+			<div class="tous active-filter">Tous</div>
 		</div>
 		<div class="gallery">
 		</div>

@@ -1,5 +1,6 @@
 async function getWorks(filter) {
     document.querySelector(".gallery").innerHTML = "";
+    document.querySelector(".modal-gallery").innerHTML = "";
     const url = "http://localhost:5678/api/works";
     try {
       const response = await fetch(url);
@@ -11,13 +12,13 @@ async function getWorks(filter) {
         const filtered = json.filter((data) => data.categoryId === filter);
         for (let i = 0; i < filtered.length; i++) {
             setFigure(filtered[i]);
-            setModalFigure(filtered[i]);
+            setFigureModal(filtered[i]);
           }
       }
         else {
             for (let i = 0; i < json.length; i++) {
                 setFigure(json[i]);
-                setModalFigure(json[i]);
+                setFigureModal(json[i]);
             }
         }
         //Delete
@@ -38,15 +39,13 @@ function setFigure(data) {
 }
 
 
-function setModalFigure(data) {
+function setFigureModal(data) {
   const figure = document.createElement("figure");
   figure.innerHTML = `<div class="image-container">
                       <img src="${data.imageUrl}" alt="${data.title}"> 
                       <figcaption>${data.title}</figcaption>
                       <i id=${data.id} class="fa-solid fa-trash-can overlay-icon"></i>
-                      </div>`;  
-                      
-                      
+                      </div>`;                   
   document.querySelector(".modal-gallery").append(figure);
 }
 
@@ -72,10 +71,20 @@ function setFilter(data) {
     const div = document.createElement("div");
     div.className = data.id;
     div.addEventListener("click", () => getWorks(data.id));
+    div.addEventListener("click", (event) => toggleFilter(event));
+    document
+    .querySelector(".tous")
+    .addEventListener("click", (event) => toggleFilter(event));
     div.innerHTML = `${data.name}`;
     document.querySelector(".div-container").append(div);
 }
-document.querySelector(".tous").addEventListener("click", () => getWorks());
+
+    function toggleFilter(event) {
+    const container = document.querrySelector(".div-container");
+    Array.from(container.children).forEach((child) => 
+    child.classList.remove("active-filter"));
+    event.target.classList.add("active-filter");  }
+    document.querySelector(".tous").addEventListener("click", () => getWorks());
 
 
 function displayAdminMode() {
@@ -85,9 +94,7 @@ function displayAdminMode() {
     editBanner.innerHTML =
     '<p><a href="#modal1" class="js-modal"><i class="fa-regular fa-pen-to-square"></i>Mode édition</a></p>';
     document.body.prepend(editBanner);
-
-    const login = document.querySelector(".login")
-    login.textContent = "logout";
+    document.querySelector(".log-button").textContent = "logout";
   }
 }
 displayAdminMode();
@@ -173,7 +180,7 @@ if(response.status == 401 || response.status == 500) {
   errorBox.innerHTML = "Il y a eu une erreur";
   document.querySelector(".modal-button-container").prepend(errorBox);
 } else {
-  let result = await response.json();
+  let result =response;
   console.log(result);
 }}
 
@@ -224,7 +231,7 @@ let titleValue = "";
 
 let selectedValue = "1";
 
-document.getElementById("categorie").addEventListener("change", function () {
+document.getElementById("category").addEventListener("change", function () {
   selectedValue = this.value;
 })
 
@@ -246,7 +253,7 @@ addPictureForm.addEventListener("submit", async (event) => {
   const formData = new FormData();
   formData.append("image", file);
   formData.append("title", titleValue);
-  formData.append("categorie", selectedValue);
+  formData.append("category", selectedValue);
 
   const token = sessionStorage.authToken;
 

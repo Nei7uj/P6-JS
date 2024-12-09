@@ -142,7 +142,7 @@ li:hover {
 	min-width: 550px;
 	width: 50%;
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-evenly;
 	margin: 35px auto;
 }
 
@@ -159,6 +159,12 @@ li:hover {
 	background-color: #1D6154;
 	color: white;
 }
+
+.active-filter {
+	background-color: #1D6154;
+	color: white;
+}
+
 /** Fin ajouts **/
 
 .gallery {
@@ -300,6 +306,16 @@ footer nav ul {
 .modal-buttons-container {
 	display: flex;	
 	justify-content: space-between;
+}
+
+.js-modal-2 {
+	padding-top: 10px;	
+}
+
+.projets-container {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
 }
 
 .js-modal-close {
