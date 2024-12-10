@@ -33,6 +33,7 @@ getWorks()
 
 function setFigure(data) {
     const figure = document.createElement("figure");
+    figure.setAttribute ("id", `figure-accueil-${data.id}`)
     figure.innerHTML = `<img src=${data.imageUrl} alt=${data.title}> 
                         <figcaption>${data.title}</figcaption>`;
     document.querySelector(".gallery").append(figure);
@@ -41,6 +42,7 @@ function setFigure(data) {
 
 function setFigureModal(data) {
   const figure = document.createElement("figure");
+  figure.setAttribute ("id", `figure-${data.id}`)
   figure.innerHTML = `<div class="image-container">
                       <img src="${data.imageUrl}" alt="${data.title}"> 
                       <figcaption>${data.title}</figcaption>
@@ -79,12 +81,15 @@ function setFilter(data) {
     document.querySelector(".div-container").append(div);
 }
 
-    function toggleFilter(event) {
-    const container = document.querrySelector(".div-container");
+function toggleFilter(event) {
+    const container = document.querySelector(".div-container");
     Array.from(container.children).forEach((child) => 
-    child.classList.remove("active-filter"));
-    event.target.classList.add("active-filter");  }
-    document.querySelector(".tous").addEventListener("click", () => getWorks());
+    child.classList.remove("active-filter")
+  );
+    event.target.classList.add("active-filter");  
+}
+       
+document.querySelector(".tous").addEventListener("click", () => getWorks());
 
 
 function displayAdminMode() {
@@ -182,6 +187,10 @@ if(response.status == 401 || response.status == 500) {
 } else {
   let result =response;
   console.log(result);
+  const deleteItem = document.getElementById (`figure-${id}`);
+  deleteItem.remove();
+  const deleteItemAccueil = document.getElementById (`figure-accueil-${id}`);
+  deleteItemAccueil.remove();
 }}
 
 const addPhotoButton = document.querySelector('.add-photo-button');
@@ -280,6 +289,7 @@ addPictureForm.addEventListener("submit", async (event) => {
     } else {
       let result = await response.json();
       console.log("Réponse réussie :", result);
+
     }
   } catch (err) {
     console.error("Erreur lors de la requête :", err);
