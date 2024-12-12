@@ -237,22 +237,17 @@ document.getElementById("file").addEventListener("change", function (event) {
 
 const titleInput = document.getElementById("title");
 let titleValue = "";
-
 let selectedValue = "1";
-
 document.getElementById("category").addEventListener("change", function () {
   selectedValue = this.value;
 })
-
 titleInput.addEventListener("input", function () {
   titleValue = titleInput.value;
 })
 
 const addPictureForm = document.getElementById("picture-form");
-
 addPictureForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-
   const hasImage = document.querySelector("#photo-container").querySelector("img");
   if (!hasImage || !titleValue) {
     console.error("Image ou titre manquant.");
@@ -265,12 +260,10 @@ addPictureForm.addEventListener("submit", async (event) => {
   formData.append("category", selectedValue);
 
   const token = sessionStorage.authToken;
-
   if (!token) {
     console.error("Token d'authentification manquant.");
     return;
   }
-
   try {
     let response = await fetch("http://localhost:5678/api/works", {
       method: "POST",
@@ -289,7 +282,10 @@ addPictureForm.addEventListener("submit", async (event) => {
     } else {
       let result = await response.json();
       console.log("Réponse réussie :", result);
-
+      const addItem = document.getElementById (`figure-${id}`);
+      addItem.add();
+      const addItemAccueil = document.getElementById (`figure-accueil-${id}`);
+      addItemAccueil.add();
     }
   } catch (err) {
     console.error("Erreur lors de la requête :", err);
