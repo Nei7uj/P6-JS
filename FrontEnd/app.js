@@ -1,3 +1,4 @@
+// Fonction principale pour récupérer et afficher les travaux
 async function getWorks(filter) {
     document.querySelector(".gallery").innerHTML = "";
     document.querySelector(".modal-gallery").innerHTML = "";
@@ -21,7 +22,6 @@ async function getWorks(filter) {
                 setFigureModal(json[i]);
             }
         }
-        //Delete
           const trashCans = document.querySelectorAll(".fa-trash-can");
           trashCans.forEach((e) => e.addEventListener("click", (event) => deleteWork(event))
         );
@@ -31,6 +31,7 @@ async function getWorks(filter) {
 }
 getWorks()
 
+// Fonction pour créer et insérer une figure dans la galerie modale.
 function setFigure(data) {
     const figure = document.createElement("figure");
     figure.setAttribute ("id", `figure-accueil-${data.id}`)
@@ -38,8 +39,6 @@ function setFigure(data) {
                         <figcaption>${data.title}</figcaption>`;
     document.querySelector(".gallery").append(figure);
 }
-
-
 function setFigureModal(data) {
   const figure = document.createElement("figure");
   figure.setAttribute ("id", `figure-${data.id}`)
@@ -51,6 +50,7 @@ function setFigureModal(data) {
   document.querySelector(".modal-gallery").append(figure);
 }
 
+// Fonction pour récupérer et afficher les catégories de travaux.
 async function getCategories() {
     const url = "http://localhost:5678/api/categories";
     try {
@@ -69,6 +69,8 @@ async function getCategories() {
 }
 getCategories();
 
+
+// Fonction pour créer et configurer un bouton de filtre pour une catégorie.
 function setFilter(data) {
     const div = document.createElement("div");
     div.className = data.id;
@@ -81,17 +83,18 @@ function setFilter(data) {
     document.querySelector(".div-container").append(div);
 }
 
+// Fonction pour gérer le style actif des filtres.
 function toggleFilter(event) {
     const container = document.querySelector(".div-container");
     Array.from(container.children).forEach((child) => 
     child.classList.remove("active-filter")
   );
     event.target.classList.add("active-filter");  
-}
-       
+}    
 document.querySelector(".tous").addEventListener("click", () => getWorks());
 
 
+// Fonction pour afficher le mode administrateur si un token est présent.
 function displayAdminMode() {
   if (sessionStorage.authToken) {
     const editBanner = document.createElement("div");
@@ -104,10 +107,12 @@ function displayAdminMode() {
 }
 displayAdminMode();
 
+// Gestion des modales.
 let modal = null;
 const focusableSelector = "button, a, input, textarea"
 let focusables = []
 
+// Ouverture de la modale.
 const openModal = function (e) {
   e.preventDefault()
   modal = document.querySelector (e.target.getAttribute('href'));
@@ -121,6 +126,7 @@ const openModal = function (e) {
   modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
 }
 
+// Fermeture de la modale.
 const closeModal = function (e) {
   if (modal === null) return;
   e.preventDefault()
@@ -133,10 +139,12 @@ const closeModal = function (e) {
   modal = null;
 }
 
+// Fonction pour empêcher la propagation d'événements.
 const stopPropagation = function (e) {
   e.stopPropagation();
 }
 
+// Gestion de l'accessibilité au clavier dans la modale.
 const focusInModal = function (e) {
   e.preventDefault();
   let index = focusables.findIndex((f) => f === modal.querySelector(":focus"));
@@ -153,7 +161,6 @@ const focusInModal = function (e) {
   }
   focusables[index].focus();
 }
-
 window.addEventListener("keydown", function (e) {
   if (e.key === "Escape" || e.key === "Esc") {
     closeModal(e);
@@ -162,12 +169,11 @@ window.addEventListener("keydown", function (e) {
     focusInModal(e);
   }
 })
-
 document.querySelectorAll(".js-modal").forEach((a) => {
   a.addEventListener("click", openModal);
 })
 
-
+// Fonction pour supprimer un travail via l'API.
 async function deleteWork(event) {
   event.stopPropagation();
   const id = event.srcElement.id; 
@@ -213,9 +219,9 @@ function toggleModal() {
   }
 }
 
+// Gestion du formulaire pour ajouter une nouvelle image.
 let img = document.createElement("img");
 let file;
-
 document.querySelector("#file").style.display = "none";
 document.getElementById("file").addEventListener("change", function (event) {
   file = event.target.files[0];
@@ -233,7 +239,6 @@ document.getElementById("file").addEventListener("change", function (event) {
   }
 })
 
-
 const titleInput = document.getElementById("title");
 let titleValue = "";
 let selectedValue = "1";
@@ -248,7 +253,6 @@ const addPictureForm = document.getElementById("picture-form");
 addPictureForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   
-  // Vérifie si une image et un titre sont présents
   const hasImage = document.querySelector("#photo-container img");
   if (!hasImage || !titleValue) {
     console.error("Image ou titre manquant.");
@@ -265,7 +269,6 @@ addPictureForm.addEventListener("submit", async (event) => {
     console.error("Token d'authentification manquant.");
     return;
   }
-
   try {
     let response = await fetch("http://localhost:5678/api/works", {
       method: "POST",
@@ -274,7 +277,6 @@ addPictureForm.addEventListener("submit", async (event) => {
       },
       body: formData,
     });
-
     if (!response.ok) {
       const errorText = await response.text();
       console.error("Erreur lors de la requête :", errorText);
@@ -283,34 +285,27 @@ addPictureForm.addEventListener("submit", async (event) => {
       errorBox.innerHTML = "Il y a eu une erreur lors de l'upload.";
       document.querySelector("form").prepend(errorBox);
     } else {
-      // Ajout de l'élément à la galerie après un succès
       let result = await response.json();
       console.log("Upload réussi :", result);
+      setFigure(result); 
+      setFigureModal(result); 
 
-      // Mise à jour immédiate de la galerie et de la modale
-      setFigure(result); // Ajouter à la galerie principale
-      setFigureModal(result); // Ajouter à la modale
-
-      // Réinitialisation du formulaire après upload
       const photoContainer = document.getElementById("photo-container");
       const uploadedImage = photoContainer.querySelector("img");
       if (uploadedImage) {
-        photoContainer.removeChild(uploadedImage); // Supprime uniquement l'image.
+        photoContainer.removeChild(uploadedImage); 
       }
+      document.querySelectorAll('.picture-loaded').forEach((e) => (e.style.display = "block"));
 
-document.querySelectorAll('.picture-loaded').forEach((e) => (e.style.display = "block")); // Réaffiche les éléments masqués.
-
-      // Rafraîchit la galerie modale
-      await getWorks(); // Recharger toutes les données pour la galerie principale et la modale
-      closeModal(new Event('click')); // Simule un clic pour fermer la modale
+      await getWorks();
+      closeModal(new Event('click'));
       setTimeout(() => closeModal(new Event('click')), 500);
 
-      // Basculer sur la modal galerie photo
       const galleryModal = document.querySelector(".gallery-modal");
       const addModal = document.querySelector(".add-modal");
 
-      addModal.style.display = "none"; // Masque la modal d'ajout
-      galleryModal.style.display = "block"; // Affiche la modal galerie
+      addModal.style.display = "none";
+      galleryModal.style.display = "block"; 
     }
   } catch (err) {
     console.error("Erreur lors de la requête :", err);
