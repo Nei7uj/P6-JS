@@ -9,19 +9,16 @@ async function getWorks(filter) {
         throw new Error(`Response status: ${response.status}`);
       } 
       const json = await response.json();
-      if (filter) {
-        const filtered = json.filter((data) => data.categoryId === filter);
-        for (let i = 0; i < filtered.length; i++) {
-            setFigure(filtered[i]);
-            setFigureModal(filtered[i]);
-          }
+      // Appliquer les filtres uniquement à la galerie principale
+      const galleryItems = filter ? json.filter((data) => data.categoryId === filter) : json;
+      for (let i = 0; i < galleryItems.length; i++) {
+          setFigure(galleryItems[i]); // Remplit la galerie principale
       }
-        else {
-            for (let i = 0; i < json.length; i++) {
-                setFigure(json[i]);
-                setFigureModal(json[i]);
-            }
-        }
+      // Toujours afficher toutes les données dans la galerie modale
+      document.querySelector(".modal-gallery").innerHTML = ""; // Réinitialise la galerie modale
+      for (let i = 0; i < json.length; i++) {
+          setFigureModal(json[i]); // Remplit la galerie modale
+      }
           const trashCans = document.querySelectorAll(".fa-trash-can");
           trashCans.forEach((e) => e.addEventListener("click", (event) => deleteWork(event))
         );
@@ -213,6 +210,7 @@ function toggleModal() {
   ) {
     galleryModal.style.display = "none";
     addModal.style.display = "block";
+    resetAddPhotoModal();
   } else {
     galleryModal.style.display = "block";
     addModal.style.display = "none";
@@ -311,5 +309,19 @@ addPictureForm.addEventListener("submit", async (event) => {
     console.error("Erreur lors de la requête :", err);
   }
 });
+
+//Fonction qui fait en sorte que la modale d'ajout ne garde pas les infos en compte
+function resetAddPhotoModal() {
+  const photoContainer = document.getElementById("photo-container");
+  const uploadedImage = photoContainer.querySelector("img");
+  if (uploadedImage) {
+      photoContainer.removeChild(uploadedImage);
+  }
+  document.querySelectorAll('.picture-loaded').forEach((e) => (e.style.display = "block"));
+  document.getElementById("file").value = "";
+  document.getElementById("title").value = "";
+  selectedValue = "1";
+  document.getElementById("category").value = "1";
+}
 
 
